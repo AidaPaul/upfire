@@ -1,4 +1,5 @@
 from evennia import Command, CmdSet
+from evennia.utils.evmenu import EvMenu
 
 
 class CommandSetProductionFocus(Command):
@@ -31,6 +32,21 @@ class CommandSetProductionFocus(Command):
 
         message = "Great, planet focus set to %s" % self.args
         location.msg_contents(message)
+
+
+class CommandShowMenu(Command):
+    """
+    Displays menu for managing and adjusting planets
+
+    Usage:
+        show_menu
+    """
+    key = "show_menu"
+    aliases = "sm"
+
+    def func(self):
+        EvMenu(self.caller, "world.planet_administration",
+               startnode="main_menu", cmdset_mergetype="Union")
 
 
 class PlanetCommandSet(CmdSet):

@@ -40,14 +40,14 @@ class Planet(Object):
         )
 
     def return_appearance(self, looker=None):
-        desc_string = "Planet %s \n" % self.name
-        desc_string += "\n----------------\n"
+        desc_string = "Planet %s \n\n" % self.name
         desc_string += "Traits:\n"
+        desc_string += "----------------\n"
         for trait in self.traits.all:
             trait = self.traits[trait]
             desc_string += str(trait.name) + ": " + str(trait.actual) + "\n"
-        desc_string += "\n----------------\n"
-        desc_string += "Resources:\n"
+        desc_string += "\nResources:\n"
+        desc_string += "----------------\n"
         for resource in self.resources.all:
             resource = self.resources[resource]
             desc_string += str(resource.name) + ": " + str(
