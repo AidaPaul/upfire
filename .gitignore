@@ -150,7 +150,6 @@ celerybeat-schedule
 
 # Environments
 .env
-.venv
 env/
 venv/
 ENV/
@@ -171,3 +170,7 @@ venv.bak/
 .mypy_cache/
 
 .idea
+
+upfire/server/*.pid
+upfire/server/*.restart
+upfire/server/evennia.db3
