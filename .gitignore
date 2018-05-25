@@ -174,3 +174,6 @@ venv.bak/
 upfire/server/*.pid
 upfire/server/*.restart
 upfire/server/evennia.db3
+
+# Here is where I store local tf installation for debugging
+tf/
