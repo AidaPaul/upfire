@@ -26,3 +26,113 @@ class Mineral(Resource):
     Base class for all the minerals
     """
     pass
+
+
+class Boronide(Mineral):
+    """
+    A mineral called Boronide
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "The primary material used in the construction of " \
+                       "power systems and capacitors and also for the " \
+                       "creation of Terraforming facilities."
+
+
+class Corbomite(Mineral):
+    """
+    A mineral called Corbomite
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used for advanced shields, stealth systems and " \
+                       "electronic warfare systems . "
+
+
+class Corundium(Mineral):
+    """
+    A mineral called Corundium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "The primary material used in almost all energy weapons."
+
+
+class Duranium(Mineral):
+    """
+    A mineral called Duranium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Most common ore and used to build factories, mines " \
+                       "and ship structures. "
+
+
+class Gallicite(Mineral):
+    """
+    A mineral called Gallicite
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used in the construction of engines, including " \
+                       "missile and fighter engines. "
+
+
+class Mercassium(Mineral):
+    """
+    A mineral called Mercassium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used for Research Facilities, life support systems " \
+                       "and tractor beams. "
+
+
+class Neutronium(Mineral):
+    """
+    A mineral called Neutronium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Very dense material used for shipyards, advanced " \
+                       "armors and kinetic weapons such as railguns or " \
+                       "orbital bombardment systems. "
+
+
+class Sorium(Mineral):
+    """
+    A mineral called Sorium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used for construction of jump drives and jump gates."
+
+
+class Tritanium(Mineral):
+    """
+    A mineral called Tritanium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "The primary material used in many missile " \
+                       "technologies and in the construction of ordnance " \
+                       "factories. "
+
+
+class Uridium(Mineral):
+    """
+    A mineral called Uridium
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used in sensors and fire control systems."
+
+
+class Vendarite(Mineral):
+    """
+    A mineral called Vendarite
+    """
+
+    def at_object_creation(self):
+        self.db.desc = "Used in the construction of fighters, fighter " \
+                       "factories and fighter bases. "
