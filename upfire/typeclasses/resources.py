@@ -1,4 +1,5 @@
 from objects import Object
+import numpy
 
 
 class Resource(Object):
@@ -7,18 +8,12 @@ class Resource(Object):
     """
 
     def at_object_creation(self):
-        self.db.desc = "A generic resource yet to be described."
+        self.db.desc = self.__str__()
         self.db.amount = 0
         self.db.volume = 0
 
-
-class Ore(Resource):
-    """
-    Base class for all the ores
-    """
-
-    def populate_with_minerals(self, seed=None):
-        pass
+    def __str__(self):
+        return self.__class__.__name__
 
 
 class Mineral(Resource):
@@ -136,3 +131,42 @@ class Vendarite(Mineral):
     def at_object_creation(self):
         self.db.desc = "Used in the construction of fighters, fighter " \
                        "factories and fighter bases. "
+
+
+AVAILABLE_MINERALS = [
+    Boronide,
+    Corbomite,
+    Corundium,
+    Duranium,
+    Gallicite,
+    Mercassium,
+    Neutronium,
+    Sorium,
+    Tritanium,
+    Uridium,
+    Vendarite,
+]
+
+
+class Ore(Resource):
+    """
+    Base class for all the ores
+    """
+
+    def at_object_creation(self):
+        Resource.at_object_creation(self)
+        self.populate_with_minerals()
+
+    def populate_with_minerals(self, seed=None, minerals=None):
+        if minerals is None:
+            minerals = AVAILABLE_MINERALS
+
+        numpy.random.seed(seed)
+        minerals_count = len(minerals)
+        split = numpy.random.dirichlet(numpy.ones(minerals_count), size=1)[0]
+        composition = {}
+        iteration = 0
+        for mineral in minerals:
+            composition[str(mineral)] = split[iteration]
+            iteration += 1
+        self.db.composition = composition
