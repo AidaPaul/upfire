@@ -1,6 +1,7 @@
 from objects import Object
 from collections import OrderedDict
 import numpy
+import random
 
 
 class Resource(Object):
@@ -157,12 +158,15 @@ class Ore(Resource):
     def at_object_creation(self):
         Resource.at_object_creation(self)
         self.populate_with_minerals()
+        self.db.volume = 4
 
     def populate_with_minerals(self, seed=None, minerals=None):
         if minerals is None:
             minerals = AVAILABLE_MINERALS
 
         numpy.random.seed(seed)
+        random.seed(seed)
+        self.db.amount = random.randint(100, 10000000)
         minerals_count = len(minerals)
         split = numpy.random.dirichlet(numpy.ones(minerals_count), size=1)[0]
         composition = OrderedDict()
@@ -174,6 +178,8 @@ class Ore(Resource):
 
     def return_appearance(self, looker=None):
         desc_string = "Ore %s \n\n" % self.name
+        desc_string += "Amount: %i\n" % self.db.amount
+        desc_string += "Volume: %i\n\n" % self.db.volume
         desc_string += "Composition: \n"
         for mineral, content in self.db.composition.iteritems():
             desc_string += "%s: %f\n" % (mineral, content)
