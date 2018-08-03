@@ -170,3 +170,10 @@ class Ore(Resource):
             composition[str(mineral)] = split[iteration]
             iteration += 1
         self.db.composition = composition
+
+    def return_appearance(self, looker=None):
+        desc_string = "Ore %s \n\n" % self.name
+        desc_string += "Composition: \n"
+        for mineral, content in self.db.composition.iteritems():
+            desc_string += "%s: %f\n" % (mineral, content)
+        return desc_string
