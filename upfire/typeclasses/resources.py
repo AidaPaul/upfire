@@ -13,6 +13,7 @@ class Resource(Object):
         self.db.desc = self.__str__()
         self.db.amount = 0
         self.db.volume = 0
+        self.locks.add("puppet:all();call:false()")
 
     def __str__(self):
         return self.__class__.__name__
