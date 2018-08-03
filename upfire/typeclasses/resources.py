@@ -1,4 +1,5 @@
 from objects import Object
+from collections import OrderedDict
 import numpy
 
 
@@ -164,7 +165,7 @@ class Ore(Resource):
         numpy.random.seed(seed)
         minerals_count = len(minerals)
         split = numpy.random.dirichlet(numpy.ones(minerals_count), size=1)[0]
-        composition = {}
+        composition = OrderedDict()
         iteration = 0
         for mineral in minerals:
             composition[str(mineral)] = split[iteration]
