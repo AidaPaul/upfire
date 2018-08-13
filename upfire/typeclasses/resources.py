@@ -157,7 +157,7 @@ class Ore(Resource):
     def at_object_creation(self):
         super(Ore, self).at_object_creation()
         self.populate_with_minerals()
-        self.db.volume = 4
+        self.volume = 4
 
     def populate_with_minerals(self, seed=None, minerals=None):
         if minerals is None:

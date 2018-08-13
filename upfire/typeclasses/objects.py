@@ -160,12 +160,10 @@ class Object(DefaultObject):
                                  object speaks
 
      """
-
-    def __init__(self):
-        super(Object, self).__init__()
-
     @property
     def volume(self):
+        if not self.db.volume:
+            raise AttributeError
         return self.db.volume
 
     @volume.setter
@@ -173,3 +171,8 @@ class Object(DefaultObject):
         if type(volume) is not int:
             raise TypeError
         self.db.volume = volume
+
+    @property
+    def mass(self):
+        mass = self.volume
+        return reduce(lambda x, y: x + y.mass(), [mass] + self.contents)

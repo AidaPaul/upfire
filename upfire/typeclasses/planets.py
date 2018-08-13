@@ -13,6 +13,7 @@ class Planet(Object):
     def at_object_creation(self):
         self.cmdset.add_default(PlanetCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
+        self.volume = 10000000
         self.traits.add(
             name="Population",
             key="population",
@@ -41,6 +42,7 @@ class Planet(Object):
 
     def return_appearance(self, looker=None):
         desc_string = "Planet %s \n\n" % self.name
+        desc_string += "Mass: %i\n" % self.mass
         desc_string += "Traits:\n"
         desc_string += "----------------\n"
         for trait in self.traits.all:
