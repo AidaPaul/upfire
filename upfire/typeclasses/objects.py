@@ -178,20 +178,6 @@ class Object(DefaultObject):
         mass = self.volume
         return reduce(lambda x, y: x + y.mass, [mass] + self.contents)
 
-    def move_to(self, destination, quiet=False,
-                emit_to_obj=None, use_destination=True, to_none=False,
-                move_hooks=True,
-                **kwargs):
-        if not destination:
-            if to_none:
-                self.location = None
-                return True
-            return False
-        self.msg('Test')
-        super(Object, self).move_to(destination, quiet, emit_to_obj,
-                                    use_destination, to_none, move_hooks,
-                                    **kwargs)
-
     def return_appearance(self, looker=None):
         desc_string = "Name: %s\n" % self.name
         desc_string += "Mass: %i\n" % self.mass

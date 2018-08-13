@@ -6,6 +6,7 @@ Commands describe the input the account can do to the game.
 """
 
 from evennia import Command as BaseCommand
+from evennia.commands.default.muxcommand import MuxCommand
 # from evennia import default_cmds
 
 
@@ -183,3 +184,48 @@ class Command(BaseCommand):
 #                 self.character = self.caller.get_puppet(self.session)
 #             else:
 #                 self.character = None
+
+
+class CmdGive(MuxCommand):
+    """
+    give away something to someone
+
+    Usage:
+      give <inventory obj> = <target>
+
+    Gives an items from your inventory to another character,
+    placing it in their inventory.
+    """
+    key = "give"
+    locks = "cmd:all()"
+    arg_regex = r"\s|$"
+
+    def func(self):
+        """Implement give"""
+
+        caller = self.caller
+        if not self.args or not self.rhs:
+            caller.msg("Usage: give <inventory object> = <target>")
+            return
+        to_give = caller.search(self.lhs, location=caller,
+                                nofound_string="You aren't carrying %s." % self.lhs,
+                                multimatch_string="You carry more than one %s:" % self.lhs)
+        target = caller.search(self.rhs)
+        if not (to_give and target):
+            return
+        if target == caller:
+            caller.msg("You keep %s to yourself." % to_give.key)
+            return
+        if not to_give.location == caller:
+            caller.msg("You are not holding %s." % to_give.key)
+            return
+        if hasattr(target, 'spare_capacity'):
+            if target.spare_capacity < to_give.volume:
+                caller.msg("Not enough capacity at destination!")
+                return
+        # give object
+        caller.msg("You give %s to %s." % (to_give.key, target.key))
+        to_give.move_to(target, quiet=True)
+        target.msg("%s gives you %s." % (caller.key, to_give.key))
+        # Call the object script's at_give() method.
+        to_give.at_give(caller, target)

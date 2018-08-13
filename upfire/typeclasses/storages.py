@@ -38,6 +38,15 @@ class Storage(Object):
         if self.capacity and self.efficiency:
             self.volume = float(self.capacity * self.efficiency)
 
+    @property
+    def spare_capacity(self):
+        return (self.capacity + self.volume) - self.mass
+
+    def return_appearance(self, looker=None):
+        desc_string = super(Storage, self).return_appearance()
+        desc_string += "Spare capacity: %f\n" % self.spare_capacity
+        return desc_string
+
 
 class Landmass(Storage):
     """
