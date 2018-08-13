@@ -1,15 +1,44 @@
-from evennia.utils import lazy_property
-from objects import Object
 from commands.storage import StorageCommandSet
+from objects import Object
+from typeclasses.planets import Planet
 
 
 class Storage(Object):
     """
-    The abstract storage unit to be implemented into actually functioning ones.
+    The abstract storage unit to be implemented into actually functioning ones
     """
-
     def at_object_creation(self):
         self.cmdset.add_default(StorageCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
         self.db.allowed_types = []
         self.db.forbidden_types = []
+        self.capacity = 0
+
+    @property
+    def capacity(self):
+        return self.db.capacity
+
+    @capacity.setter
+    def capacity(self, capacity):
+        self.db.capacity = capacity
+
+
+class Landmass(Storage):
+    """
+    Representation of land masses where stuff can be dumped or buildings placed
+    """
+
+    def at_object_creation(self):
+        super(Landmass, self).at_object_creation()
+        self.capacity = 10000
+
+
+class CargoBay(Storage):
+    """
+    Basic cargo storage used for ships, forbids from storing planets
+    """
+
+    def at_object_creation(self):
+        super(CargoBay, self).at_object_creation()
+        self.capacity = 100
+        self.db.forbidden_types = [Planet.__name__]
