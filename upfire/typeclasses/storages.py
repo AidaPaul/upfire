@@ -1,5 +1,5 @@
 from commands.storage import StorageCommandSet
-from objects import Object
+from typeclasses.objects import Object
 from typeclasses.planets import Planet
 
 
@@ -12,15 +12,26 @@ class Storage(Object):
         self.locks.add("puppet:all();call:false()")
         self.db.allowed_types = []
         self.db.forbidden_types = []
-        self.capacity = 0
+        self.efficiency = 1.5
+        self.capacity = 1
 
     @property
     def capacity(self):
-        return self.db.capacity
+        return float(self.db.capacity)
 
     @capacity.setter
     def capacity(self, capacity):
         self.db.capacity = capacity
+        self.volume = float(capacity * self.efficiency)
+
+    @property
+    def efficiency(self):
+        return self.db.efficiency
+
+    @efficiency.setter
+    def efficiency(self, efficiency):
+        self.db.efficiency = efficiency
+        # TODO: recalculate if cargo can actually fit in here.
 
 
 class Landmass(Storage):

@@ -160,6 +160,7 @@ class Object(DefaultObject):
                                  object speaks
 
      """
+
     @property
     def volume(self):
         if not self.db.volume:
@@ -168,7 +169,7 @@ class Object(DefaultObject):
 
     @volume.setter
     def volume(self, volume):
-        if type(volume) is not int:
+        if type(volume) is not float:
             raise TypeError
         self.db.volume = volume
 
@@ -181,4 +182,17 @@ class Object(DefaultObject):
                 emit_to_obj=None, use_destination=True, to_none=False,
                 move_hooks=True,
                 **kwargs):
-        pass
+        if not destination:
+            if to_none:
+                self.location = None
+                return True
+            return False
+        self.msg('Test')
+        super(Object, self).move_to(destination, quiet, emit_to_obj,
+                                    use_destination, to_none, move_hooks,
+                                    **kwargs)
+
+    def return_appearance(self, looker=None):
+        desc_string = "Name: %s\n" % self.name
+        desc_string += "Mass: %i\n" % self.mass
+        return desc_string

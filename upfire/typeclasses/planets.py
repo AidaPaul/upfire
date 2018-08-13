@@ -42,7 +42,7 @@ class Planet(Object):
 
     def return_appearance(self, looker=None):
         desc_string = "Planet %s \n\n" % self.name
-        desc_string += "Mass: %i\n" % self.mass
+        desc_string += "Mass: %f\n" % self.mass
         desc_string += "Traits:\n"
         desc_string += "----------------\n"
         for trait in self.traits.all:
