@@ -175,4 +175,10 @@ class Object(DefaultObject):
     @property
     def mass(self):
         mass = self.volume
-        return reduce(lambda x, y: x + y.mass(), [mass] + self.contents)
+        return reduce(lambda x, y: x + y.mass, [mass] + self.contents)
+
+    def move_to(self, destination, quiet=False,
+                emit_to_obj=None, use_destination=True, to_none=False,
+                move_hooks=True,
+                **kwargs):
+        pass
