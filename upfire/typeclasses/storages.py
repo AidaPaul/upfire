@@ -17,12 +17,13 @@ class Storage(Object):
 
     @property
     def capacity(self):
-        return float(self.db.capacity)
+        if self.db.capacity:
+            return float(self.db.capacity)
 
     @capacity.setter
     def capacity(self, capacity):
         self.db.capacity = capacity
-        self.volume = float(capacity * self.efficiency)
+        self._recalculate()
 
     @property
     def efficiency(self):
@@ -31,7 +32,11 @@ class Storage(Object):
     @efficiency.setter
     def efficiency(self, efficiency):
         self.db.efficiency = efficiency
-        # TODO: recalculate if cargo can actually fit in here.
+        self._recalculate()
+
+    def _recalculate(self):
+        if self.capacity and self.efficiency:
+            self.volume = float(self.capacity * self.efficiency)
 
 
 class Landmass(Storage):
@@ -42,6 +47,7 @@ class Landmass(Storage):
     def at_object_creation(self):
         super(Landmass, self).at_object_creation()
         self.capacity = 10000
+        self.efficiency = 2
 
 
 class CargoBay(Storage):
