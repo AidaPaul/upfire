@@ -160,4 +160,16 @@ class Object(DefaultObject):
                                  object speaks
 
      """
-    pass
+
+    def __init__(self):
+        super(Object, self).__init__()
+
+    @property
+    def volume(self):
+        return self.db.volume
+
+    @volume.setter
+    def volume(self, volume):
+        if type(volume) is not int:
+            raise TypeError
+        self.db.volume = volume

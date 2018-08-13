@@ -11,8 +11,6 @@ class Resource(Object):
 
     def at_object_creation(self):
         self.db.desc = self.__str__()
-        self.db.amount = 0
-        self.db.volume = 0
         self.locks.add("puppet:all();call:false()")
 
     def __str__(self):
@@ -157,7 +155,7 @@ class Ore(Resource):
     """
 
     def at_object_creation(self):
-        Resource.at_object_creation(self)
+        super(Ore, self).at_object_creation()
         self.populate_with_minerals()
         self.db.volume = 4
 
@@ -167,7 +165,6 @@ class Ore(Resource):
 
         numpy.random.seed(seed)
         random.seed(seed)
-        self.db.amount = random.randint(100, 10000000)
         minerals_count = len(minerals)
         split = numpy.random.dirichlet(numpy.ones(minerals_count), size=1)[0]
         composition = OrderedDict()
@@ -179,7 +176,6 @@ class Ore(Resource):
 
     def return_appearance(self, looker=None):
         desc_string = "Ore %s \n\n" % self.name
-        desc_string += "Amount: %i\n" % self.db.amount
         desc_string += "Volume: %i\n\n" % self.db.volume
         desc_string += "Composition: \n"
         for mineral, content in self.db.composition.iteritems():
