@@ -1,3 +1,4 @@
+from evennia import create_object
 from evennia.utils import lazy_property
 
 from commands.planet import PlanetCommandSet
@@ -13,7 +14,7 @@ class Planet(Object):
     def at_object_creation(self):
         self.cmdset.add_default(PlanetCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
-        self.volume = 10000000
+        self.volume = float(10000000)
         self.traits.add(
             name="Population",
             key="population",
@@ -39,6 +40,8 @@ class Planet(Object):
             type="counter",
             base=0,
         )
+        self.storages.append(create_object("typeclasses.storages.Landmass",
+                                           key="landmass"))
 
     def return_appearance(self, looker=None):
         desc_string = "Planet %s \n\n" % self.name
@@ -54,6 +57,15 @@ class Planet(Object):
             resource = self.resources[resource]
             desc_string += str(resource.name) + ": " + str(
                 resource.actual) + "\n"
+        desc_string += "\nStorages:\n"
+        desc_string += "----------------\n"
+        storage_free = 0.0
+        storage_total = 0.0
+        for storage in self.storages:
+            storage_free = storage_free + storage.spare_capacity
+            storage_total = storage_total + storage.capacity
+            desc_string += "%s: %s" % (str(storage), str(storage.capacity))
+        desc_string += "\nFree/total: %s/%s" % (storage_free, storage_total)
         return desc_string
 
     @lazy_property
@@ -63,3 +75,20 @@ class Planet(Object):
     @lazy_property
     def resources(self):
         return TraitHandler(self, db_attribute="resources")
+
+    @property
+    def capacity(self):
+        capacity = float(0)
+        for storage in self.storages:
+            capacity = storage.capacity + capacity
+        return capacity
+
+    @property
+    def storages(self):
+        if not self.db.storages:
+            self.db.storages = []
+        return self.db.storages
+
+    @storages.setter
+    def storages(self, storages):
+        self.db.storages = storages

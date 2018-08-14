@@ -1,6 +1,5 @@
 from commands.storage import StorageCommandSet
 from typeclasses.objects import Object
-from typeclasses.planets import Planet
 
 
 class Storage(Object):
@@ -67,4 +66,4 @@ class CargoBay(Storage):
     def at_object_creation(self):
         super(CargoBay, self).at_object_creation()
         self.capacity = 100
-        self.db.forbidden_types = [Planet.__name__]
+        self.db.forbidden_types = ['Planet']
