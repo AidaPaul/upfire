@@ -17,20 +17,20 @@ class CommandSetProductionFocus(Command):
     def func(self):
         caller = self.caller
         location = caller.location
-        self.args = self.args[1:]
+        args = self.args[1:]
 
-        if not self.args:
+        if not args:
             message = "You must specify production focus for it to work!"
             location.msg_contents(message)
             return
 
-        if self.args not in ["civilian", "naval"]:
+        if args not in ["civilian", "naval"]:
             message = "Focus must be either civilian or naval! %s provided" % \
-                      self.args[0]
+                      args[0]
             location.msg_contents(message)
             return
 
-        message = "Great, planet focus set to %s" % self.args
+        message = "Great, planet focus set to %s" % args
         location.msg_contents(message)
 
 

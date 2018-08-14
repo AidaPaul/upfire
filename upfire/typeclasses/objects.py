@@ -160,4 +160,25 @@ class Object(DefaultObject):
                                  object speaks
 
      """
-    pass
+
+    @property
+    def volume(self):
+        if not self.db.volume:
+            raise AttributeError
+        return self.db.volume
+
+    @volume.setter
+    def volume(self, volume):
+        if type(volume) is not float:
+            raise TypeError
+        self.db.volume = volume
+
+    @property
+    def mass(self):
+        mass = self.volume
+        return reduce(lambda x, y: x + y.mass, [mass] + self.contents)
+
+    def return_appearance(self, looker=None):
+        desc_string = "Name: %s\n" % self.name
+        desc_string += "Mass: %i\n" % self.mass
+        return desc_string
