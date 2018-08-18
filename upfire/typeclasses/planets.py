@@ -36,18 +36,6 @@ class Planet(Object):
             base=0,
             mod=0,
         )
-        self.resources.add(
-            name="Various metals",
-            key="metals",
-            type="counter",
-            base=0,
-        )
-        self.resources.add(
-            name="Various minerals",
-            key="minerals",
-            type="counter",
-            base=0,
-        )
         self.storages.append(create_object("typeclasses.storages.Landmass",
                                            key="landmass"))
 
@@ -59,12 +47,6 @@ class Planet(Object):
         for trait in self.traits.all:
             trait = self.traits[trait]
             desc_string += str(trait.name) + ": " + str(trait.actual) + "\n"
-        desc_string += "\nResources:\n"
-        desc_string += "----------------\n"
-        for resource in self.resources.all:
-            resource = self.resources[resource]
-            desc_string += str(resource.name) + ": " + str(
-                resource.actual) + "\n"
         desc_string += "\nStorages:\n"
         desc_string += "----------------\n"
         storage_free = 0.0
