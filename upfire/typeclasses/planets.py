@@ -6,6 +6,14 @@ from objects import Object
 from world.traits import TraitHandler
 
 
+class NoStorageException(Exception):
+    pass
+
+
+class FindingStorageFailedException(Exception):
+    pass
+
+
 class Planet(Object):
     """
     Describes basic type for all the planets
@@ -92,3 +100,17 @@ class Planet(Object):
     @storages.setter
     def storages(self, storages):
         self.db.storages = storages
+
+    def at_object_receive(self, moved_obj, source_location, **kwargs):
+        if not self.storages:
+            moved_obj.location = source_location
+            raise NoStorageException("A move to a planet with no storage was"
+                                     "allowed!")
+        success = False
+        for storage in self.storages:
+            if storage.spare_capacity >= moved_obj.volume:
+                moved_obj.location = storage
+                success = True
+                return
+        if not success:
+            raise FindingStorageFailedException
