@@ -111,6 +111,6 @@ class Planet(Object):
             if storage.spare_capacity >= moved_obj.volume:
                 moved_obj.location = storage
                 success = True
-                return
+                break
         if not success:
             raise FindingStorageFailedException
