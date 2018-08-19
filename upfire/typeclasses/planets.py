@@ -3,6 +3,7 @@ from evennia.utils import lazy_property
 
 from commands.planet import PlanetCommandSet
 from objects import Object
+from typeclasses.storages import Landmass
 from world.traits import TraitHandler
 
 
@@ -36,8 +37,8 @@ class Planet(Object):
             base=0,
             mod=0,
         )
-        self.storages.append(create_object("typeclasses.storages.Landmass",
-                                           key="landmass"))
+        create_object("typeclasses.storages.Landmass", key="landmass",
+                      location=self)
 
     def return_appearance(self, looker=None):
         desc_string = "Planet %s \n\n" % self.name
@@ -49,14 +50,13 @@ class Planet(Object):
             desc_string += str(trait.name) + ": " + str(trait.actual) + "\n"
         desc_string += "\nStorages:\n"
         desc_string += "----------------\n"
-        storage_free = 0.0
-        storage_total = 0.0
-        for storage in self.storages:
-            storage_free = storage_free + storage.spare_capacity
-            storage_total = storage_total + storage.capacity
-            desc_string += "%s: %s" % (str(storage), str(storage.capacity))
-        desc_string += "\nFree/total: %s/%s" % (storage_free, storage_total)
+        desc_string += "\nFree/total: %s/%s" % (self.spare_capacity,
+                                                self.capacity)
         return desc_string
+
+    @property
+    def storages(self):
+        return self.contents
 
     @lazy_property
     def traits(self):
@@ -68,31 +68,35 @@ class Planet(Object):
 
     @property
     def capacity(self):
-        capacity = float(0)
+        capacity = 0.0
         for storage in self.storages:
             capacity = storage.capacity + capacity
         return capacity
 
     @property
-    def storages(self):
-        if not self.db.storages:
-            self.db.storages = []
-        return self.db.storages
+    def spare_capacity(self):
+        storage_free = 0.0
+        for storage in self.storages:
+            storage_free = storage_free + storage.spare_capacity
+        return storage_free
 
     @storages.setter
     def storages(self, storages):
         self.db.storages = storages
 
     def at_object_receive(self, moved_obj, source_location, **kwargs):
+        if isinstance(moved_obj, Landmass):
+            return
         if not self.storages:
             moved_obj.location = source_location
-            raise NoStorageException("A move to a planet with no storage was"
+            raise NoStorageException("A move to a planet with no storage was "
                                      "allowed!")
         success = False
         for storage in self.storages:
-            if storage.spare_capacity >= moved_obj.volume:
+            if storage.spare_capacity > moved_obj.volume:
                 moved_obj.location = storage
                 success = True
                 break
         if not success:
+            moved_obj.location = source_location
             raise FindingStorageFailedException
