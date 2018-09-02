@@ -1,6 +1,3 @@
-import os
-
-import raven
 from evennia.settings_default import *
 
 # This is the name of your game. Make it catchy!
@@ -23,13 +20,6 @@ WEBSOCKET_CLIENT_ENABLED = True
 WEBSOCKET_CLIENT_PORT = 4005
 # Internal Server-Portal port. Not visible.
 AMP_PORT = 4006
-
-RAVEN_CONFIG = {
-    'dsn': 'https://bcc190def7554482b4d7263e97354986:69ff94d7ffec46109a4a190ccaaf32e9@sentry.io/1264848',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-}
 
 INSTALLED_APPS = INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
 
