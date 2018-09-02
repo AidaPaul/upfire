@@ -1,18 +1,11 @@
 from evennia import create_object
-from evennia.utils import lazy_property
+from evennia.utils import lazy_property, inherits_from
 
 from commands.planet import PlanetCommandSet
 from objects import Object
+from typeclasses.objects import NoStorageException
 from typeclasses.storages import Landmass
 from world.traits import TraitHandler
-
-
-class NoStorageException(Exception):
-    pass
-
-
-class FindingStorageFailedException(Exception):
-    pass
 
 
 class Planet(Object):
@@ -37,6 +30,7 @@ class Planet(Object):
             base=0,
             mod=0,
         )
+        self.allowed_types = [type(Landmass()), ]
         create_object("typeclasses.storages.Landmass", key="landmass",
                       location=self)
 
@@ -84,19 +78,16 @@ class Planet(Object):
     def storages(self, storages):
         self.db.storages = storages
 
+    def announce_move_from(self, destination, msg=None, mapping=None, **kwargs):
+        try:
+            Object.announce_move_from(self, destination, msg=None,
+                                      mapping=None, **kwargs)
+        except NoStorageException:
+            self.ndb.move_override = True
+
     def at_object_receive(self, moved_obj, source_location, **kwargs):
-        if isinstance(moved_obj, Landmass):
+        if inherits_from(moved_obj, Landmass):
+            moved_obj.location = self
             return
-        if not self.storages:
-            moved_obj.location = source_location
-            raise NoStorageException("A move to a planet with no storage was "
-                                     "allowed!")
-        success = False
-        for storage in self.storages:
-            if storage.spare_capacity > moved_obj.volume:
-                moved_obj.location = storage
-                success = True
-                break
-        if not success:
-            moved_obj.location = source_location
-            raise FindingStorageFailedException
+        super(Object, self).at_object_receive(self, moved_obj, source_location,
+                                              **kwargs)

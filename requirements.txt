@@ -1,2 +1,3 @@
-git+https://github.com/evennia/evennia.git
+git+https://github.com/puciek/evennia.git
 numpy
+raven

@@ -9,8 +9,6 @@ class Storage(Object):
     def at_object_creation(self):
         self.cmdset.add_default(StorageCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
-        self.db.allowed_types = []
-        self.db.forbidden_types = []
         self.efficiency = 1.5
         self.capacity = 1
 
@@ -40,6 +38,9 @@ class Storage(Object):
     @property
     def spare_capacity(self):
         return (self.capacity + self.volume) - self.mass
+
+    def at_object_receive(self, moved_obj, source_location, **kwargs):
+        moved_obj.location = self
 
     def return_appearance(self, looker=None):
         desc_string = super(Storage, self).return_appearance()

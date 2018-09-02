@@ -13,6 +13,14 @@ inheritance.
 from evennia import DefaultObject
 
 
+class NoStorageException(Exception):
+    pass
+
+
+class FindingStorageFailedException(Exception):
+    pass
+
+
 class Object(DefaultObject):
     """
     This is the root typeclass object, implementing an in-game Evennia
@@ -178,7 +186,52 @@ class Object(DefaultObject):
         mass = self.volume
         return reduce(lambda x, y: x + y.mass, [mass] + self.contents)
 
+    @property
+    def allowed_types(self):
+        if not self.ndb.allowed_types:
+            self.ndb.allowed_types = []
+        return self.ndb.allowed_types
+
+    @allowed_types.setter
+    def allowed_types(self, allowed_types):
+        self.ndb.allowed_types = allowed_types
+
+    @property
+    def forbidden_types(self):
+        if not self.ndb.forbidden_types:
+            self.ndb.forbidden_types = []
+        return self.ndb.forbidden_types
+
+    @forbidden_types.setter
+    def forbidden_types(self, forbidden_types):
+        self.db.forbidden_types = forbidden_types
+
     def return_appearance(self, looker=None):
         desc_string = "Name: %s\n" % self.name
         desc_string += "Mass: %i\n" % self.mass
         return desc_string
+
+    def announce_move_from(self, destination, msg=None, mapping=None, **kwargs):
+        if not destination.storages:
+            raise NoStorageException("A move to a object with no storage was "
+                                     "allowed!")
+        if destination.allowed_types and type(
+                self) not in destination.allowed_types:
+            raise FindingStorageFailedException
+        if destination.forbidden_types and type(
+                self) in destination.forbidden_types:
+            raise FindingStorageFailedException
+        raise FindingStorageFailedException
+
+    def at_object_receive(self, moved_obj, source_location, **kwargs):
+        if self.ndb.move_override:
+            self.ndb.move_override = False
+            return
+        if not self.storages:
+            raise NoStorageException("A move to a object with no storage was "
+                                     "allowed!")
+        for storage in self.storages:
+            if storage.spare_capacity > moved_obj.volume:
+                moved_obj.location = storage
+                return
+        raise FindingStorageFailedException
