@@ -1,3 +1,4 @@
 git+https://github.com/puciek/evennia.git
 numpy
 raven
+virtualenv
