@@ -1,7 +1,9 @@
-from objects import Object
-from collections import OrderedDict
-import numpy
 import random
+from collections import OrderedDict
+
+import numpy
+
+from objects import Object
 
 
 class Resource(Object):
@@ -157,7 +159,7 @@ class Ore(Resource):
     def at_object_creation(self):
         super(Ore, self).at_object_creation()
         self.populate_with_minerals()
-        self.volume = 4
+        self.volume = 4.0
 
     def populate_with_minerals(self, seed=None, minerals=None):
         if minerals is None:

@@ -9,8 +9,7 @@ class Storage(Object):
     def at_object_creation(self):
         self.cmdset.add_default(StorageCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
-        self.db.allowed_types = []
-        self.db.forbidden_types = []
+        self.volume = 100.00
         self.efficiency = 1.5
         self.capacity = 1
 
@@ -41,6 +40,9 @@ class Storage(Object):
     def spare_capacity(self):
         return (self.capacity + self.volume) - self.mass
 
+    def at_object_receive(self, moved_obj, source_location, **kwargs):
+        moved_obj.location = self
+
     def return_appearance(self, looker=None):
         desc_string = super(Storage, self).return_appearance()
         desc_string += "Spare capacity: %f\n" % self.spare_capacity
@@ -54,7 +56,7 @@ class Landmass(Storage):
 
     def at_object_creation(self):
         super(Landmass, self).at_object_creation()
-        self.capacity = 10000
+        self.capacity = 10000.00
         self.efficiency = 2
 
 
@@ -65,5 +67,5 @@ class CargoBay(Storage):
 
     def at_object_creation(self):
         super(CargoBay, self).at_object_creation()
-        self.capacity = 100
+        self.capacity = 100.00
         self.db.forbidden_types = ['Planet']

@@ -21,6 +21,8 @@ WEBSOCKET_CLIENT_PORT = 4005
 # Internal Server-Portal port. Not visible.
 AMP_PORT = 4006
 
+INSTALLED_APPS = INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
+
 try:
     from server.conf.secret_settings import *
 except ImportError:
