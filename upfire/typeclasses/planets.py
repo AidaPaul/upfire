@@ -2,8 +2,7 @@ from evennia import create_object
 from evennia.utils import lazy_property, inherits_from
 
 from commands.planet import PlanetCommandSet
-from objects import Object
-from typeclasses.objects import NoStorageException
+from typeclasses.objects import NoStorageException, Object
 from typeclasses.storages import Landmass
 from world.traits import TraitHandler
 
@@ -89,5 +88,5 @@ class Planet(Object):
         if inherits_from(moved_obj, Landmass):
             moved_obj.location = self
             return
-        super(Object, self).at_object_receive(self, moved_obj, source_location,
+        super(Planet, self).at_object_receive(moved_obj, source_location,
                                               **kwargs)

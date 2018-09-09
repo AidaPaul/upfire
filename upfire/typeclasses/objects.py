@@ -211,6 +211,13 @@ class Object(DefaultObject):
         desc_string += "Mass: %i\n" % self.mass
         return desc_string
 
+    def deposit_in_storage(self, moved_obj):
+        for storage in self.storages:
+            if storage.spare_capacity > moved_obj.volume:
+                moved_obj.location = storage
+                return True
+        return False
+
     def announce_move_from(self, destination, msg=None, mapping=None, **kwargs):
         if not destination.storages:
             raise NoStorageException("A move to a object with no storage was "
@@ -224,14 +231,9 @@ class Object(DefaultObject):
         raise FindingStorageFailedException
 
     def at_object_receive(self, moved_obj, source_location, **kwargs):
-        if self.ndb.move_override:
-            self.ndb.move_override = False
-            return
         if not self.storages:
             raise NoStorageException("A move to a object with no storage was "
                                      "allowed!")
-        for storage in self.storages:
-            if storage.spare_capacity > moved_obj.volume:
-                moved_obj.location = storage
-                return
+        if self.deposit_in_storage(moved_obj):
+            return True
         raise FindingStorageFailedException

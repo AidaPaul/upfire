@@ -9,6 +9,7 @@ class Storage(Object):
     def at_object_creation(self):
         self.cmdset.add_default(StorageCommandSet, permanent=True)
         self.locks.add("puppet:all();call:false()")
+        self.volume = 100.00
         self.efficiency = 1.5
         self.capacity = 1
 
@@ -55,7 +56,7 @@ class Landmass(Storage):
 
     def at_object_creation(self):
         super(Landmass, self).at_object_creation()
-        self.capacity = 10000
+        self.capacity = 10000.00
         self.efficiency = 2
 
 
@@ -66,5 +67,5 @@ class CargoBay(Storage):
 
     def at_object_creation(self):
         super(CargoBay, self).at_object_creation()
-        self.capacity = 100
+        self.capacity = 100.00
         self.db.forbidden_types = ['Planet']
