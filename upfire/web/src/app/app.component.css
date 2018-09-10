@@ -1,0 +1,18 @@
+canvas {
+  width: 100%;
+  height: 100%
+}
+
+body {
+  background: #202020;
+  margin: 0 !important;
+  padding: 0;
+  overflow: hidden;
+}
+
+.label {
+  color: #FFF;
+  font-family: sans-serif;
+  padding: 2px;
+  background: rgba(0, 0, 0, .6);
+}
