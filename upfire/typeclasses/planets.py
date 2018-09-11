@@ -2,7 +2,8 @@ from evennia import create_object
 from evennia.utils import lazy_property, inherits_from
 
 from commands.planet import PlanetCommandSet
-from typeclasses.objects import NoStorageException, Object
+from objects import Object
+from typeclasses.objects import NoStorageException
 from typeclasses.storages import Landmass
 from world.traits import TraitHandler
 
