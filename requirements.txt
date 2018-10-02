@@ -2,3 +2,6 @@ git+https://github.com/puciek/evennia.git
 numpy
 raven
 virtualenv
+behave-django
+cryptography
+pyasn1
