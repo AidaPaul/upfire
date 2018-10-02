@@ -22,6 +22,17 @@ WEBSOCKET_CLIENT_PORT = 4005
 AMP_PORT = 4006
 
 INSTALLED_APPS = INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
+INSTALLED_APPS = INSTALLED_APPS + ('behave_django',)
+
+TEST_USER = {
+    'name': 'puciek',
+    'password': 'aaa',
+}
+
+TEST_HOST = {
+    'host': '127.0.0.1',
+    'port': TELNET_PORTS[0],
+}
 
 try:
     from server.conf.secret_settings import *
